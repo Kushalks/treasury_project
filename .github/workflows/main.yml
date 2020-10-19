@@ -12,7 +12,7 @@ jobs:
     - name: 'Deploy'
       uses: 'deliverybot/helm@v1'
       with:
-        release: 'treasury_release'
+        release: 'treasuryrelease'
         namespace: 'kkushal'
         chart: 'app'
         token: '${{ github.token }}'
