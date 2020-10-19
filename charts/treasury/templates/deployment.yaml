@@ -46,6 +46,8 @@ spec:
             - name: config 
               mountPath: "/mnt/config"
               readOnly: true
+      imagePullSecrets:
+        - name: synhadev-secret    
       volumes:
       - name: config
         configMap:
