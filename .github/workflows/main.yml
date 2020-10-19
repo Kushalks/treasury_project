@@ -14,7 +14,7 @@ jobs:
       with:
         release: 'treasuryrelease'
         namespace: 'kkushal'
-        chart: 'treasury'
+        chart: './charts/treasury'
         token: '${{ github.token }}'
       env:
         KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
