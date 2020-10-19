@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "api.fullname" . }}
+  labels:
+    {{- include "api.labels" . | nindent 4 }}
+spec:
+{{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+{{- end }}
+  selector:
+    matchLabels:
+      {{- include "api.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+    {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      labels:
+        {{- include "api.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.api.image.repository }}:{{ .Values.api.image.version }}"
+          imagePullPolicy: {{ .Values.api.image.pullPolicy }}
+          command:
+            - /bin/sh
+            - -c
+            - >
+                echo "Starting...";
+                /usr/bin/treasury --config /mnt/config/treasury.yaml
+          ports:
+            - containerPort: 8000  
+          livenessProbe:
+            httpGet:
+              path: /live
+              port: 8000
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8000    
+            initialDelaySeconds: 15
+            periodSeconds: 30
+          volumeMounts:
+            - name: config 
+              mountPath: "/mnt/config"
+              readOnly: true
+      volumes:
+      - name: config
+        configMap:
+          name: pdxtreasury
+          items:
+            - key: treasury.yaml
+              path: treasury.yaml

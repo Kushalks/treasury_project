@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pdxtreasury
+data:
+  treasury.yaml: |
+    # the port number the server will run on
+    port: 8000
+
+    # connection string for the MongoDB database
+    connection_string: "mongodb://sha-treasury-cosmos:jTy13DpJOO4Ju2PxiGF73uB6WAQbmWLULdAIViZxSTaI4AtvX2RqAK4MU3mn9S9uw9fkzIEhnssExoa3ccTTlg==@sha-treasury-cosmos.documents.azure.com:10255/?ssl=true&replicaSet=globaldb"
+
+    # database name where the treasury details are saved
+    database_name: "treasury"
+    
+    # transaction related details are saved here
+    transaction_collection: "txdetails"
+    
+    # hierarchy data is saved in this collection to be used in history endpoint
+    hierarchy_collection: "hierarchy"
